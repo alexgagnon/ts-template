@@ -1,0 +1,208 @@
+openapi: 3.1.0
+info:
+  title: Books API
+  version: '1.0.0'
+  description: |
+    REST API to interact with books
+
+    ### Check out its awesome features:
+
+    * Add books 🌃
+    * Get books 😎
+    * Delete books 📈
+
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+
+servers:
+  - url: http://localhost:{port}{basePath}
+    variables:
+      port:
+        default: '8081'
+
+      basePath:
+        default: '/'
+
+  - url: https://{env}{host}{port}{basePath}{version}
+    variables:
+      env:
+        enum:
+          - 'dev.'
+          - 'test.'
+          - ''
+        default: ''
+
+      host:
+        default: 'example.org'
+
+      port:
+        default: ''
+
+      basePath:
+        default: '/api/books'
+
+      version:
+        default: '/v1.0'
+
+components:
+  schemas:
+    Book:
+      type: object
+      required:
+        - title
+        - author
+        - yearPublished
+        - id
+      properties:
+        title:
+          type: string
+        author:
+          type: string
+        yearPublished:
+          type: integer
+          format: int32
+          min: -2500
+          max: 2025
+        id:
+          $ref: '#/components/schemas/BookId'
+
+    BookId:
+      type: string
+      format: uuid
+
+  parameters:
+    BookId:
+      name: id
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/BookId'
+
+  requestBodies:
+    Book:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Book'
+
+    NewBook:
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - title
+              - author
+              - yearPublished
+            properties:
+              title:
+                type: string
+              author:
+                type: string
+              yearPublished:
+                type: integer
+                format: int32
+                min: -2500
+                max: 2025
+
+  responses:
+    Book:
+      description: Book
+      content:
+        default:
+          200:
+            schema:
+              $ref: '#/components/schemas/Book'
+
+    '204':
+      description: No content
+
+    '401':
+      description: Unauthenticated
+      content:
+        default:
+          401:
+
+    '404':
+      description: Not found
+
+    '409':
+      description: Conflict
+
+paths:
+  /:
+    get:
+      deprecated: false
+      description: Index
+      responses:
+        200:
+          description: Index
+          content:
+            text/plain:
+              schema:
+                type: string
+
+  /books:
+    get:
+      description: Get all books
+      responses:
+        200:
+          description: Get all books
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  schema:
+                    $ref: '#/components/schemas/Book'
+
+        401:
+          $ref: '#/components/responses/401'
+
+    post:
+      description: Create a book
+      requestBody:
+        $ref: '#/components/requestBodies/NewBook'
+      responses:
+        200:
+          $ref: '#/components/responses/Book'
+        401:
+          $ref: '#/components/responses/401'
+        409:
+          $ref: '#/components/responses/409'
+
+  /books/{id}:
+    parameters:
+      - $ref: '#/components/parameters/BookId'
+
+    put:
+      description: Update a book
+      requestBody:
+        $ref: '#/components/requestBodies/Book'
+      responses:
+        204:
+          $ref: '#/components/responses/204'
+        401:
+          $ref: '#/components/responses/401'
+        404:
+          $ref: '#/components/responses/404'
+
+    delete:
+      description: Delete a book
+      responses:
+        204:
+          $ref: '#/components/responses/204'
+        401:
+          $ref: '#/components/responses/401'
+        404:
+          $ref: '#/components/responses/404'
+
+
+
+
+
+
+
+
+

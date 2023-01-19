@@ -1,0 +1,23 @@
+@baseUri = http://localhost:8081
+
+GET {{baseUri}}/books
+
+###
+
+GET {{baseUri}}/books?role=admin
+
+###
+
+GET {{baseUri}}/books/00000000-0000-0000-0000-000000000000?role=admin
+
+###
+
+POST {{baseUri}}/books?role=admin
+Content-Type: application/json
+
+{"author": "Steven Erikson", "yearPublished": 2000, "title": "Garden of the Moon"}
+
+###
+
+DELETE {{baseUri}}/books/00000000-0000-0000-0000-000000000000?role=admin
+Content-Type: application/json
