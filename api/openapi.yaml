@@ -130,6 +130,8 @@ components:
           scopes:
             read: Grants read access
             write: Grants write access
+            read.books: Grants read access to books
+            write.books: Grants write access to books
             admin: Grants read/write access and admin operations
 
 paths:
@@ -152,6 +154,7 @@ paths:
         - OAuth2:
           - admin
           - read
+          - read.books
       responses:
         200:
           description: Get all books
@@ -172,6 +175,7 @@ paths:
         - OAuth2:
           - admin
           - write
+          - write.books
       requestBody:
         $ref: '#/components/requestBodies/NewBook'
       responses:
@@ -191,6 +195,7 @@ paths:
         - OAuth2:
           - admin
           - write
+          - write.books
       requestBody:
         $ref: '#/components/requestBodies/Book'
       responses:
@@ -207,6 +212,7 @@ paths:
         - OAuth2:
           - admin
           - write
+          - write.books
       responses:
         204:
           $ref: '#/components/responses/204'
