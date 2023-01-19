@@ -20,7 +20,6 @@ servers:
     variables:
       port:
         default: '8081'
-
       basePath:
         default: '/'
 
@@ -32,16 +31,12 @@ servers:
           - 'test.'
           - ''
         default: ''
-
       host:
         default: 'example.org'
-
       port:
         default: ''
-
       basePath:
         default: '/api/books'
-
       version:
         default: '/v1.0'
 
@@ -114,21 +109,28 @@ components:
           200:
             schema:
               $ref: '#/components/schemas/Book'
-
     '204':
       description: No content
-
     '401':
       description: Unauthenticated
-      content:
-        default:
-          401:
-
+    '403':
+      description: Unauthorized
     '404':
       description: Not found
-
     '409':
       description: Conflict
+
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://example.com/oauth/authorize
+          tokenUrl: https://example.com/oauth/token
+          scopes:
+            read: Grants read access
+            write: Grants write access
+            admin: Grants read/write access and admin operations
 
 paths:
   /:
@@ -146,6 +148,10 @@ paths:
   /books:
     get:
       description: Get all books
+      security:
+        - OAuth2:
+          - admin
+          - read
       responses:
         200:
           description: Get all books
@@ -154,14 +160,18 @@ paths:
               schema:
                 type: array
                 items:
-                  schema:
-                    $ref: '#/components/schemas/Book'
-
+                  $ref: '#/components/schemas/Book'
         401:
           $ref: '#/components/responses/401'
+        403:
+          $ref: '#/components/responses/403'
 
     post:
       description: Create a book
+      security:
+        - OAuth2:
+          - admin
+          - write
       requestBody:
         $ref: '#/components/requestBodies/NewBook'
       responses:
@@ -175,9 +185,12 @@ paths:
   /books/{id}:
     parameters:
       - $ref: '#/components/parameters/BookId'
-
     put:
       description: Update a book
+      security:
+        - OAuth2:
+          - admin
+          - write
       requestBody:
         $ref: '#/components/requestBodies/Book'
       responses:
@@ -190,6 +203,10 @@ paths:
 
     delete:
       description: Delete a book
+      security:
+        - OAuth2:
+          - admin
+          - write
       responses:
         204:
           $ref: '#/components/responses/204'
@@ -197,12 +214,3 @@ paths:
           $ref: '#/components/responses/401'
         404:
           $ref: '#/components/responses/404'
-
-
-
-
-
-
-
-
-

@@ -13,14 +13,13 @@ It includes the following developer tooling:
 
 - wireit for script management
 - husky for git hooks
-- typescript for types
-- vite for bundling and dev server
+- typescript for static type checking
 - prettier for linting/formatting
+- vite for bundling and dev server
 - jest for unit tests
-- newman for API tests
+- k6 for smoke/load testing
 - testing-library for DOM and JS framework tests
 - playwright for e2e tests
-- k6 for smoke/load testing
 
 It also demonstrates usage of some common libraries:
 
@@ -33,10 +32,10 @@ It also demonstrates usage of some common libraries:
 ## Considerations
 
 Common requirements:
-- compiling/transpiling - turning one language into another. Commonly used for turning more modern versions of ECMAScript into older versions for compability, or from other languages such as Typescript.
+- compiling/transpiling - turning one language or feature sets into another. Commonly used for turning more modern versions of ECMAScript into older versions for compability, or from other languages such as Typescript.
 - bundling - converting multiple modules into a single bundle to reduce network requests.
 - minification - trimming whitespace, mangling names, and compression to reduce bandwidth.
-- cache busting - naming files with a revision strategy (commonly the md5 hash of the file), to maximize caching performance
+- cache busting - naming files with a revision strategy (commonly the md5 hash of the file), to maximize caching performance.
 
 The first thing to remember is where the code is running...
 
