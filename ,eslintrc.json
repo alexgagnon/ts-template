@@ -1,0 +1,17 @@
+{
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint"],
+  "root": true,
+  "rules": {
+    "array-bracket-newline": "consistent",
+    "brace-style": "stroustrup",
+    "function-call-argument-newline": "consistent",
+    "function-paren-newline": "multiline",
+    "indent": ["error", 2]
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "prettier"
+  ]
+}

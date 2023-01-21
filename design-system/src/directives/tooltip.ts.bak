@@ -1,0 +1,38 @@
+import { render } from "lit";
+import {
+  directive,
+  Directive,
+  DirectiveParameters,
+  ElementPart,
+} from "lit/directive";
+import { Tooltip } from "../components/tooltip/Tooltip";
+
+class TooltipDirective extends Directive {
+  didSetupLazy = false;
+  tooltipContent?: unknown;
+  part?: ElementPart;
+  tooltip?: Tooltip;
+  render(tooltipContent: unknown = "") {}
+  update(part: ElementPart, [tooltipContent]: DirectiveParameters<this>) {
+    this.tooltipContent = tooltipContent;
+    this.part = part;
+    if (!this.didSetupLazy) {
+      this.setupLazy();
+    }
+    if (this.tooltip) {
+      this.renderTooltipContent();
+    }
+  }
+  setupLazy() {
+    this.didSetupLazy = true;
+    Tooltip.lazy(this.part!.element, (tooltip: Tooltip) => {
+      this.tooltip = tooltip;
+      this.renderTooltipContent();
+    });
+  }
+  renderTooltipContent() {
+    render(this.tooltipContent, this.tooltip!, this.part!.options);
+  }
+}
+
+export const tooltip = directive(TooltipDirective);

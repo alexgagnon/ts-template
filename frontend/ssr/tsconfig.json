@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "module": "esnext",
+    "target": "es6",
+    "outDir": "./dist",
+    "sourceMap": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "Node",
+    "allowJs": true,
+    "noImplicitAny": true
+  },
+  "include": ["src/**/*.ts"],
+  "buildOptions": {
+    "incremental": true
+  }
+}

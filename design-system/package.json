@@ -1,13 +1,50 @@
 {
-  "name": "design-system",
+  "name": "design_system",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
-  "devDependencies": {},
+  "type": "module",
+  "main": "dist/design-system.mjs",
+  "module": "dist/design-system.mjs",
+  "files": [
+    "dist/**",
+    "out-tsc/**"
+  ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "vite",
+    "tsc": "wireit",
+    "build": "wireit",
+    "test": "echo \"Error: no test specified\" && exit 0"
+  },
+  "wireit": {
+    "tsc": {
+      "command": "tsc",
+      "files": [
+        "src/**/*.ts",
+        "tsconfig.json",
+        ".env"
+      ],
+      "output": [
+        "out-tsc/**/*.*",
+        ".tsbuildinfo"
+      ]
+    },
+    "build": {
+      "command": "vite build",
+      "files": [
+        "out-tsc/**/*.*",
+        "public/**/*.*",
+        ".tsbuildinfo"
+      ],
+      "dependencies": [
+        "tsc"
+      ]
+    }
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "@floating-ui/dom": "^1.1.0",
+    "lit": "^2.6.1"
+  }
 }
