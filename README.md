@@ -1,13 +1,17 @@
 # TypeScript Template
 
-Starter repo for javascript apps and libraries written in typescript.
+Starter repo for javascript apps and libraries written in typescript. To make it more similar to a "real" app, it also includes authentication based on OAuth2 and OpenID Connect and telemetry. It is strictly Node.js based, so the only thing you need is Node.JS 16+.
 
-The repo is divided based on type, as they have different requirements
+NOTE: it includes DEVELOPMENT ONLY versions of an Identity Provider for authentication and MongoDB-like database. THESE SHOULD ABSOLUTELY NOT BE USED IN PRODUCTION, and are prefixed with `_` to identify them as such.
+
+The repo is divided based on type, as they have different requirements.
 
 1. api - backend abstraction layer
-   1. rest - RFC
-   2. graphql
-2. frontend - HTML serving application
+  1. rest
+  2. graphql - UNDER DEVELOPMENT
+2. frontend - browser-based application
+  1. spa
+  2. ssr
 3. library - module for consumption in other apps (apis and/or frontends)
 4. design-system - collection of frontend components
 
@@ -35,13 +39,21 @@ And additionally for frontend:
 
 It also demonstrates usage of some common libraries:
 
+- opentelemetry - traces, metrics, and logs for node and web
 - winston/morgan - logging
 - lodash - utility functions
 - dayjs - date functions
 - express - server
-- class-validator - schema validation
-- prisma - ORM/GraphQL resolver
+- zod - schema validation
+- typeorm - database ORM
 - lit - web-components helper
+
+## Recommended extensions
+
+- sonarlint
+- prettier
+- eslint
+- wireit
 
 ## Background
 
@@ -60,7 +72,7 @@ Each browser has their own Javascript engine (Chrome/Edge = v8, Safari = JavaScr
 
 - Browser:
 
-  - sandboxed, no access to OS
+  - sandboxed, no direct access to OS
   - bundling, minification, and cache busting preferred for performance
   - may need to transpile if using another language or features not yet in all of the browsers you are using
   - modules:
@@ -82,12 +94,12 @@ Separation of concerns with clean abstractions is a key design principal for mai
 
 - presentation layer - browser, data sent to/from apis
 - controller layer - request/response handling
-- service layer - business logic, mapping/transforming values
+- service layer - business logic, mapping/transforming between DTOs and Entities, etc.
 - persistence layer - database and/or filesystem
 
 In classic OOP, you'd have objects representing those in your persistence layer (Entities), and those that are involved in transferring data between services (Data Transfor Objects, DTOs).
 
-If you use an relational database (Postgres, MySQL, SQL Server, SQLite, .etc), an Object Relational Mapper (ORM) helps with handling the interaction of Entities to their formats in the database (typically one or more joined tables).
+If you use an relational database (Postgres, MySQL, SQL Server, SQLite, .etc), an Object Relational Mapper (ORM) helps with handling the interaction of OOP Entities with their counterparts in the database (typically one or more joined tables).
 
 DTOs are typically shared between the interacting services (i.e. client-server) to ease serializing the data between them.
 
@@ -108,19 +120,19 @@ A constraint is additional narrowing down of allowable values, for example makin
 
 Many libraries have been created to infer and/or generate schemas, types, and objects from one another depending on a development strategy:
 
-- Design-First - design a schema in some Domain Specific Language (DSL) such as GraphQLs Schema Definition Language or a specification such as OpenAPI and/or JSON Schema, and generate the code for the objects and types.
-- Code-First - explicitely write types, or the define a class/object and extract the type, or write a schema and infer the type.
+- Design-First - design a schema in some Domain Specific Language (DSL) such as GraphQLs Schema Definition Language (SDL) or a specification such as OpenAPI and/or JSON Schema, and generate the code for the objects and types.
+- Code-First - explicitely write types, or define a class and extract the type, or write a schema and infer the generate the class and type.
 
-There are also goals of reducing boiler-plate for common tasks, such as creating necessary database tables/collections to match Entities, generating CRUD operations for REST APIs, and generating resolvers for GraphQL queries and mutations.
+There are also goals of reducing boiler-plate for common tasks, such as creating necessary database tables/collections to match Entities, generating CRUD operations for REST APIs, and generating resolvers for GraphQL queries and mutations. This is typically done with help of ORMs.
 
-Generally the least friction comes from having the fewest sources of truth, and defining constraints at the same time. It is also a best practice when using multiple services to design the API first so that the services can be developing concurrently and independentently from each other.
+Generally the least friction comes from having the fewest sources of truth, and defining constraints in that source. It is also a best practice when using multiple services to design the API first so that the services can be developing concurrently and independentently from each other.
 
-Unfortunately there isn't currently a jack-of-all-trades solution that fits well for ORM entities, GraphQL schemas, and general purpose validators
+Unfortunately there isn't currently a jack-of-all-trades solution that fits well for ORM entities, GraphQL schemas, and general purpose validators.
 
 The recommended libraries for doing this are:
 
 - DTOs, general purpose - zod, define a code-based schema, extract the type and class
-- Entities - , define a code-based schema, extract the type and class
+- Entities - typeorm, define a code-based schema, extract the type and class
 - GraphQL - graphql-nexus - code-based GraphQL schema
 
 ### Configuration
