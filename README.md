@@ -2,7 +2,7 @@
 
 Starter repo for javascript apps and libraries written in typescript. To make it more similar to a "real" app, it also includes authentication based on OAuth2 and OpenID Connect and telemetry. It is strictly Node.js based, so the only thing you need is Node.JS 16+.
 
-NOTE: it includes DEVELOPMENT ONLY versions of an Identity Provider for authentication and MongoDB-like database. THESE SHOULD ABSOLUTELY NOT BE USED IN PRODUCTION, and are prefixed with `_` to identify them as such.
+NOTE: it includes DEVELOPMENT ONLY and NON-PERSISTENT mocks for an Identity Provider for authentication, a nosql database for the persistance layer of the APIs, and key/value store for a distributed session store. They are only there to demonstrate how a complete application can be wired up. THESE SHOULD ABSOLUTELY NOT BE USED IN PRODUCTION, and are prefixed with `_` to identify them as such.
 
 The repo is divided based on type, as they have different requirements.
 
@@ -39,7 +39,7 @@ And additionally for frontend:
 
 It also demonstrates usage of some common libraries:
 
-- opentelemetry - traces, metrics, and logs for node and web
+- opentelemetry - traces, metrics, and logs
 - winston/morgan - logging
 - lodash - utility functions
 - dayjs - date functions
@@ -56,6 +56,12 @@ It also demonstrates usage of some common libraries:
 - wireit
 
 ## Background
+
+Node.JS is an excellent platform to be able to write full stack applications solely in JS. However, JS lacks the strong type system that enables catching a large amount of errors through static analysis and provides a less streamlined IDE experience. TS is a superset of JS that also adds a type system, and is quickly becoming the defacto standard for non-trivial applications.
+
+The JS/TS ecosystem is also littered with many tools and frameworks, making it difficult to start new applications without sourcing many different tutorials/guides to come up with one that's production ready.
+
+This repository seeks to make it easy to spin up new full stack applications written in TS, with modern tooling for building, testing, logging, and publishing.
 
 ### Tooling
 
@@ -77,7 +83,7 @@ Each browser has their own Javascript engine (Chrome/Edge = v8, Safari = JavaScr
   - may need to transpile if using another language or features not yet in all of the browsers you are using
   - modules:
     - IIFE - single file closures, good for not polluting window object, small bundles, and reduced number of resources
-    - UMD - allows for loading of multiple module types including commonjs modules, no longer commonly used
+    - UMD - allows for loading of multiple module types including commonjs modules
     - es6 modules - native modules, good for development since bundling is not required
 
 - NodeJS:
@@ -99,16 +105,16 @@ Separation of concerns with clean abstractions is a key design principal for mai
 
 In classic OOP, you'd have objects representing those in your persistence layer (Entities), and those that are involved in transferring data between services (Data Transfor Objects, DTOs).
 
-If you use an relational database (Postgres, MySQL, SQL Server, SQLite, .etc), an Object Relational Mapper (ORM) helps with handling the interaction of OOP Entities with their counterparts in the database (typically one or more joined tables).
+If you use a relational database (Postgres, MySQL, SQL Server, SQLite, .etc), an Object Relational Mapper (ORM) helps with handling the interaction of OOP Entities with their counterparts in the database (typically one or more joined tables). This same notion can be extended to NoSQL databases that have well-defined schemas for their collections, such as MongoDB.
 
 DTOs are typically shared between the interacting services (i.e. client-server) to ease serializing the data between them.
 
 ### Security
 
-- user input validation
+- user input validation - sql injection, regex bombs, dos
 - csrf
 - xss
-- secrets
+- secret management
 
 ### Class/Object vs. Type vs. Schema
 
@@ -131,7 +137,7 @@ Unfortunately there isn't currently a jack-of-all-trades solution that fits well
 
 The recommended libraries for doing this are:
 
-- DTOs, general purpose - zod, define a code-based schema, extract the type and class
+- general purpose, DTOs - zod, define a code-based schema, extract the type and class
 - Entities - typeorm, define a code-based schema, extract the type and class
 - GraphQL - graphql-nexus - code-based GraphQL schema
 
