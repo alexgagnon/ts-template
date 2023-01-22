@@ -4,12 +4,14 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 0"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "tingodb": "^0.6.1"
+    "ioredis-mock": "^8.2.2",
+    "mongodb-memory-server": "^8.11.3"
   }
 }
